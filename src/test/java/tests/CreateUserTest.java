@@ -41,7 +41,6 @@ public class CreateUserTest extends BaseTest {
         createUser.setUserBody(user);
         Response userResponse = createUser.createUser();
         Response userDoubleResponse = createUser.createUser();
-        // получение токена пользователя для дальнейшей работы с ним
         accessToken = userResponse.path("accessToken");
         createUser.getResponseDoubleUser(userDoubleResponse);
     }
@@ -53,7 +52,6 @@ public class CreateUserTest extends BaseTest {
         user = randomUser.generateUser();
         createUser.setUserBody(new UserJSON(null, user.getPassword(), user.getEmail()));
         Response userResponse = createUser.createUser();
-        // получение токена пользователя для дальнейшей работы с ним
         accessToken = userResponse.path("accessToken");
         createUser.getResponseUserWithoutData(userResponse);
     }
@@ -65,7 +63,6 @@ public class CreateUserTest extends BaseTest {
         user = randomUser.generateUser();
         createUser.setUserBody(new UserJSON(null, user.getPassword(), user.getEmail()));
         Response userResponse = createUser.createUser();
-        // получение токена пользователя для дальнейшей работы с ним
         accessToken = userResponse.path("accessToken");
         createUser.getResponseUserWithoutData(userResponse);
     }
@@ -77,13 +74,12 @@ public class CreateUserTest extends BaseTest {
         user = randomUser.generateUser();
         createUser.setUserBody(new UserJSON(null, user.getPassword(), user.getEmail()));
         Response userResponse = createUser.createUser();
-        // получение токена пользователя для дальнейшей работы с ним
         accessToken = userResponse.path("accessToken");
         createUser.getResponseUserWithoutData(userResponse);
     }
 
-    @Override
+    @After
     public void afterClass() throws Exception {
-        super.afterClass();
+        createUser.deleteUser(accessToken);
     }
 }
