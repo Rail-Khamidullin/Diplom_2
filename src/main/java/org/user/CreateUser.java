@@ -13,8 +13,11 @@ public class CreateUser implements SupportCreateUser {
     public static final String CREATE_USER_API = "/api/auth/register";
     // Endpoint авторизации пользователя
     public static final String LOGIN_USER_API = "/api/auth/login";
+    // Endpoint обновления данных пользователя
+    public static final String UPDATE_DATE_API = "/api/auth/user";
     // Endpoint удаления пользователя
     public static final String DELETE_USER_API = "api/auth/user";
+
 
     // Создаём экземпляр класса с телом запроса
     private UserJSON userJSON;
@@ -48,7 +51,6 @@ public class CreateUser implements SupportCreateUser {
     }
 
     @Step("Получаем ответ false и статус код 403")
-    @Description("Создание пользователя с не полными кредами (негативный сценарий)")
     public void getResponseUserWithoutData(Response response) {
         response.then().assertThat().statusCode(403)
                 .body("success",equalTo(false))
@@ -81,6 +83,51 @@ public class CreateUser implements SupportCreateUser {
         response.then().assertThat().statusCode(401)
                 .body("success",equalTo(false))
                 .body("message", equalTo("email or password are incorrect"));
+    }
+
+    /// Обновление данных пользователя___________________
+    @Step("Обновление данных пользователя")
+    public Response updateDataUser(UserJSON userJSON, String accessToken) {
+        if (accessToken != null) {
+        Response response = given()
+                .header("Content-type", "application/json")
+                .header("authorization", accessToken)
+                .log().all()
+                .body(userJSON)
+                .when()
+                .patch(UPDATE_DATE_API);
+        return response;
+        } else {
+            Response response = given()
+                    .header("Content-type", "application/json")
+                    .log().all()
+                    .body(userJSON)
+                    .when()
+                    .patch(UPDATE_DATE_API);
+            return response;
+        }
+    }
+
+    @Step("Получаем ответ true и статус код 200 после обновления данных")
+    public void getUpdateDateUser(Response response, UserJSON userJSON) {
+        response.then().assertThat().statusCode(200)
+                .body("success",equalTo(true))
+                .body("user.email",equalTo(userJSON.getEmail()))
+                .body("user.name", equalTo(userJSON.getName()));
+    }
+
+    @Step("Получаем ответ true и статус код 403 на обновление данных")
+    public void getUpdateWithDoubleEmail(Response response, UserJSON userJSON) {
+        response.then().assertThat().statusCode(403)
+                .body("success",equalTo(false))
+                .body("message", equalTo("User with such email already exists"));
+    }
+
+    @Step("Получаем ответ false и статус код 401 на обновление данных")
+    public void getErrorUpdateUser(Response response) {
+        response.then().assertThat().statusCode(401)
+                .body("success",equalTo(false))
+                .body("message", equalTo("You should be authorised"));
     }
 
     /// Удаление пользователя____________________

@@ -11,22 +11,25 @@ import org.user.CreateUser;
 
 public class CreateUserTest extends BaseTest {
 
-    UserJSON user;
-    GeneratorUser randomUser;
-    String accessToken;
+    private UserJSON user;
+    private GeneratorUser randomUser;
+    private String accessToken;
     final CreateUser createUser = new CreateUser();
 
     @Override
     public void setUp() {
         super.setUp();
+        // генерация данных
+        user = randomUser.generateUser();
     }
 
     @Test
     @DisplayName("Создание валидиного пользователя") // имя теста
     @Description("Создание уникального пользователя (позитивный сценарий)") // описание теста
     public void createUserTest() {
-        user = randomUser.generateUser();
+        // добавление данных в тело запроса
         createUser.setUserBody(user);
+        // создание пользователя
         Response userResponse = createUser.createUser();
         // получение токена пользователя для дальнейшей работы с ним
         accessToken = userResponse.path("accessToken");
@@ -37,19 +40,17 @@ public class CreateUserTest extends BaseTest {
     @DisplayName("Создание дублированного пользователя") // имя теста
     @Description("Создание пользователя с одинаковыми кредами (негативный сценарий)") // описание теста
     public void createDoubleUserTest() {
-        user = randomUser.generateUser();
         createUser.setUserBody(user);
-        Response userResponse = createUser.createUser();
-        Response userDoubleResponse = createUser.createUser();
-        accessToken = userResponse.path("accessToken");
-        createUser.getResponseDoubleUser(userDoubleResponse);
+        Response firstUser = createUser.createUser();
+        Response secondUser = createUser.createUser();
+        accessToken = firstUser.path("accessToken");
+        createUser.getResponseDoubleUser(secondUser);
     }
 
     @Test
     @DisplayName("Создание пользователя без заполнения имени") // имя теста
     @Description("Создание пользователя с не полными кредами (негативный сценарий)") // описание теста
     public void createUserWithoutNameTest() {
-        user = randomUser.generateUser();
         createUser.setUserBody(new UserJSON(null, user.getPassword(), user.getEmail()));
         Response userResponse = createUser.createUser();
         accessToken = userResponse.path("accessToken");
@@ -60,7 +61,6 @@ public class CreateUserTest extends BaseTest {
     @DisplayName("Создание пользователя без заполнения пароля") // имя теста
     @Description("Создание пользователя с не полными кредами (негативный сценарий)") // описание теста
     public void createUserWithoutPasswordTest() {
-        user = randomUser.generateUser();
         createUser.setUserBody(new UserJSON(null, user.getPassword(), user.getEmail()));
         Response userResponse = createUser.createUser();
         accessToken = userResponse.path("accessToken");
@@ -71,7 +71,6 @@ public class CreateUserTest extends BaseTest {
     @DisplayName("Создание пользователя без заполнения email") // имя теста
     @Description("Создание пользователя с не полными кредами (негативный сценарий)") // описание теста
     public void createUserWithoutEmailTest() {
-        user = randomUser.generateUser();
         createUser.setUserBody(new UserJSON(null, user.getPassword(), user.getEmail()));
         Response userResponse = createUser.createUser();
         accessToken = userResponse.path("accessToken");

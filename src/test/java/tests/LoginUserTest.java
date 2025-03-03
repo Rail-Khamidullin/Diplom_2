@@ -11,24 +11,24 @@ import org.user.CreateUser;
 
 public class LoginUserTest extends BaseTest {
 
-    UserJSON user;
-    GeneratorUser randomUser;
-    String accessToken;
+    private UserJSON user;
+    private GeneratorUser randomUser;
+    private String accessToken;
     final CreateUser createUser = new CreateUser();
 
     @Override
     public void setUp() {
         super.setUp();
-    }
-
-    @Test
-    @DisplayName("Авторизация валидиного пользователя") // имя теста
-    @Description("Создание уникального пользователя (позитивный сценарий)") // описание теста
-    public void loginUserTest() {
         user = randomUser.generateUser();
         createUser.setUserBody(user);
         Response userResponse = createUser.createUser();
         accessToken = userResponse.path("accessToken");
+    }
+
+    @Test
+    @DisplayName("Авторизация валидиного пользователя") // имя теста
+    @Description("Авторизация пользователя с верными кредами (позитивный сценарий)") // описание теста
+    public void loginUserTest() {
         Response loginUserResponse = createUser.loginUser(user);
         createUser.loginValidUser(loginUserResponse);
     }
@@ -37,10 +37,6 @@ public class LoginUserTest extends BaseTest {
     @DisplayName("Авторизация НЕ валидиного пользователя") // имя теста
     @Description("Авторизация пользователя с не верным логином (негативный сценарий)") // описание теста
     public void authorizeWithErrorLoginTest() {
-        user = randomUser.generateUser();
-        createUser.setUserBody(user);
-        Response userResponse = createUser.createUser();
-        accessToken = userResponse.path("accessToken");
         Response loginUserResponse = createUser
                 .loginUser(new UserJSON("NameTest", user.getPassword(), user.getEmail()));
         createUser.getResponseWhenErrorCred(loginUserResponse);
@@ -50,10 +46,6 @@ public class LoginUserTest extends BaseTest {
     @DisplayName("Авторизация НЕ валидиного пользователя") // имя теста
     @Description("Авторизация пользователя с не верным паролем (негативный сценарий)") // описание теста
     public void authorizeWithErrorPasswordTest() {
-        user = randomUser.generateUser();
-        createUser.setUserBody(user);
-        Response userResponse = createUser.createUser();
-        accessToken = userResponse.path("accessToken");
         Response loginUserResponse = createUser
                 .loginUser(new UserJSON (user.getName(), "1111", user.getEmail()));
         createUser.getResponseWhenErrorCred(loginUserResponse);
@@ -63,10 +55,6 @@ public class LoginUserTest extends BaseTest {
     @DisplayName("Авторизация НЕ валидиного пользователя") // имя теста
     @Description("Авторизация пользователя с не верным email (негативный сценарий)") // описание теста
     public void authorizeWithErrorEmailTest() {
-        user = randomUser.generateUser();
-        createUser.setUserBody(user);
-        Response userResponse = createUser.createUser();
-        accessToken = userResponse.path("accessToken");
         Response loginUserResponse = createUser
                 .loginUser(new UserJSON(user.getName(), user.getPassword(), "test@email.ru"));
         createUser.getResponseWhenErrorCred(loginUserResponse);
@@ -76,10 +64,6 @@ public class LoginUserTest extends BaseTest {
     @DisplayName("Авторизация НЕ валидиного пользователя") // имя теста
     @Description("Авторизация пользователя без логина (негативный сценарий)") // описание теста
     public void authorizeWithoutLoginTest() {
-        user = randomUser.generateUser();
-        createUser.setUserBody(user);
-        Response userResponse = createUser.createUser();
-        accessToken = userResponse.path("accessToken");
         Response loginUserResponse = createUser
                 .loginUser(new UserJSON (null, user.getPassword(), user.getEmail()));
         createUser.getResponseWhenErrorCred(loginUserResponse);
@@ -89,10 +73,6 @@ public class LoginUserTest extends BaseTest {
     @DisplayName("Авторизация НЕ валидиного пользователя") // имя теста
     @Description("Авторизация пользователя без пароля (негативный сценарий)") // описание теста
     public void authorizeWithoutPasswordTest() {
-        user = randomUser.generateUser();
-        createUser.setUserBody(user);
-        Response userResponse = createUser.createUser();
-        accessToken = userResponse.path("accessToken");
         Response loginUserResponse = createUser
                 .loginUser(new UserJSON (user.getName(), null, user.getEmail()));
         createUser.getResponseWhenErrorCred(loginUserResponse);
@@ -102,10 +82,6 @@ public class LoginUserTest extends BaseTest {
     @DisplayName("Авторизация НЕ валидиного пользователя") // имя теста
     @Description("Авторизация пользователя без email (негативный сценарий)") // описание теста
     public void authorizeWithoutEmailTest() {
-        user = randomUser.generateUser();
-        createUser.setUserBody(user);
-        Response userResponse = createUser.createUser();
-        accessToken = userResponse.path("accessToken");
         Response loginUserResponse = createUser
                 .loginUser(new UserJSON (user.getName(), "1111", null));
         createUser.getResponseWhenErrorCred(loginUserResponse);
