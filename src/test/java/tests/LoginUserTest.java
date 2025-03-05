@@ -89,6 +89,10 @@ public class LoginUserTest extends BaseTest {
 
     @After
     public void afterClass() throws Exception {
-        createUser.deleteUser(accessToken);
+        if (accessToken != null) {
+            createUser.deleteUser(accessToken);
+        } else {
+            System.out.println("User is null !");
+        }
     }
 }

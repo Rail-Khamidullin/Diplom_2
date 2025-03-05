@@ -64,7 +64,7 @@ public class UpdateUserTest extends BaseTest {
     @Description("Смена email на такой же (негативный сценарий)") // описание теста
     public void updateSameEmailAfterloginTest() {
         Response newDataUser = createUser.updateDataUser(user, accessToken);
-        createUser.getUpdateDateUser(newDataUser, user);
+        createUser.getUpdateWithDoubleEmail(newDataUser);
     }
 
     @Test
@@ -99,6 +99,10 @@ public class UpdateUserTest extends BaseTest {
 
     @After
     public void afterClass() throws Exception {
-        createUser.deleteUser(accessToken);
+        if (accessToken != null) {
+            createUser.deleteUser(accessToken);
+        } else {
+            System.out.println("User is null !");
+        }
     }
 }

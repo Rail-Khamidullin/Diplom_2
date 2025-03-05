@@ -117,7 +117,7 @@ public class CreateUser implements SupportCreateUser {
     }
 
     @Step("Получаем ответ true и статус код 403 на обновление данных")
-    public void getUpdateWithDoubleEmail(Response response, UserJSON userJSON) {
+    public void getUpdateWithDoubleEmail(Response response) {
         response.then().assertThat().statusCode(403)
                 .body("success",equalTo(false))
                 .body("message", equalTo("User with such email already exists"));
@@ -132,16 +132,11 @@ public class CreateUser implements SupportCreateUser {
 
     /// Удаление пользователя____________________
     public void deleteUser(String accessToken) {
-
-        if (accessToken != null) {
             Response response = given()
                     .header("authorization", accessToken)
                     .log().all()
                     .when()
                     .delete(DELETE_USER_API);
             response.then().statusCode(202); // Проверяем статус код
-        } else {
-            System.out.println("User is null !");
-        }
     }
 }
