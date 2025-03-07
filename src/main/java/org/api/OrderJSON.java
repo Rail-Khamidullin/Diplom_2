@@ -2,6 +2,7 @@ package org.api;
 
 import java.util.List;
 
+// Тело запроса для создания заказа
 public class OrderJSON {
 
     List<String> ingredients;

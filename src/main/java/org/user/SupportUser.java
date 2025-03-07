@@ -4,7 +4,7 @@ import io.restassured.response.Response;
 import org.api.UserJSON;
 
 
-public interface SupportCreateUser {
+public interface SupportUser {
 
     // Создание пользователя
     public Response createUser();
@@ -12,4 +12,6 @@ public interface SupportCreateUser {
     public Response loginUser(UserJSON userJSON);
     // Удаление пользователя
     public void deleteUser(String accessToken);
+    // Обновление данных пользователя
+    public Response updateDataUser(UserJSON userJSON, String accessToken);
 }

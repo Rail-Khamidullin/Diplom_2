@@ -1,4 +1,4 @@
-package tests;
+package tests.user;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
@@ -7,14 +7,15 @@ import org.api.UserJSON;
 import org.generator.GeneratorUser;
 import org.junit.After;
 import org.junit.Test;
-import org.user.CreateUser;
+import org.user.User;
+import tests.BaseTest;
 
 public class UpdateUserTest extends BaseTest {
 
     private UserJSON user;
     private GeneratorUser randomUser;
     private String accessToken;
-    final CreateUser createUser = new CreateUser();
+    final User createUser = new User();
 
     @Override
     public void setUp() {

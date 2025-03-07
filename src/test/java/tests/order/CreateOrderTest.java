@@ -1,4 +1,4 @@
-package tests;
+package tests.order;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
@@ -8,28 +8,29 @@ import org.api.UserJSON;
 import org.generator.GeneratorUser;
 import org.junit.After;
 import org.junit.Test;
-import org.order.CreateOrder;
-import org.user.CreateUser;
+import org.order.Order;
+import org.user.User;
+import tests.BaseTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateOrderTest extends BaseTest {
 
-    OrderJSON orderJSON;
-    CreateOrder createOrder = new CreateOrder();
+    OrderJSON orderJSON = new OrderJSON();
+    Order order = new Order();
     List<String> ingredients = new ArrayList<>();
     Response response;
 
     private UserJSON user;
     private GeneratorUser randomUser;
     String accessToken;
-    CreateUser createUser = new CreateUser();
+    User createUser = new User();
 
     @Override
     public void setUp() {
         super.setUp();
-        response = createOrder.getIngridient();
+        response = order.getIngridient();
     }
 
     @Test
@@ -42,15 +43,14 @@ public class CreateOrderTest extends BaseTest {
         ingredients.add(ingredFirst);
         ingredients.add(ingredSecond);
         orderJSON = new OrderJSON(ingredients);
-        Response getRequest = createOrder.createOrder(orderJSON, null);
-        createOrder.getOrderWithIngredient(getRequest);
+        Response getRequest = order.createOrder(orderJSON, null);
+        order.getOrderWithIngredient(getRequest);
     }
 
     @Test
     @DisplayName("Создание заказа") // имя теста
-    @Description("Создание заказа с авторизации (позитивный сценарий)") // описание теста
+    @Description("Создание заказа с авторизацией (позитивный сценарий)") // описание теста
     public void createOrderWithAuthTest() {
-        // достаём id ингридиентов и добавляем сначала в массив, а потом в тело запроса
         String ingredFirst = response.path("data[0]._id");
         String ingredSecond = response.path("data[1]._id");
         ingredients.add(ingredFirst);
@@ -62,36 +62,26 @@ public class CreateOrderTest extends BaseTest {
         Response getAccess = createUser.createUser();  // создание пользователя
         accessToken = getAccess.path("accessToken");  // получение токена пользователя для дальнейшей работы с ним
 
-        Response getRequest = createOrder.createOrder(orderJSON, accessToken);
-        createOrder.getOrderWithIngredient(getRequest);
+        Response getRequest = order.createOrder(orderJSON, accessToken);
+        order.getOrderWithIngredient(getRequest);
     }
 
     @Test
     @DisplayName("Создание заказа") // имя теста
-    @Description("Создание заказа без ингридиентов (негативый сценарий)") // описание теста
+    @Description("Создание заказа без ингредиентов (негативый сценарий)") // описание теста
     public void createOrderWithoutIngredientTest() {
-        orderJSON = new OrderJSON();
-        Response getRequest = createOrder.createOrder(orderJSON, null);
-        createOrder.getOrderWithoutIngredient(getRequest);
+        Response getRequest = order.createOrder(orderJSON, null);
+        order.getOrderWithoutIngredient(getRequest);
     }
 
     @Test
     @DisplayName("Создание заказа") // имя теста
-    @Description("Создание заказа с не верными ингридиентами (негативый сценарий)") // описание теста
-    public void createOrderWithoutBodyTest() {
-        orderJSON = new OrderJSON();
-        Response getRequest = createOrder.createOrder(orderJSON, null);
-        createOrder.getOrderWithoutIngredient(getRequest);
-    }
-
-    @Test
-    @DisplayName("Создание заказа") // имя теста
-    @Description("Создание заказа с не верными ингридиентами (негативый сценарий)") // описание теста
+    @Description("Создание заказа с не верными ингредиентами (негативый сценарий)") // описание теста
     public void createOrderBagIngredientTest() {
         ingredients.add("3123");
         orderJSON = new OrderJSON(ingredients);
-        Response getRequest = createOrder.createOrder(orderJSON, null);
-        createOrder.getOrderBagIngredient(getRequest);
+        Response getRequest = order.createOrder(orderJSON, null);
+        order.getOrderBagIngredient(getRequest);
     }
 
     @After

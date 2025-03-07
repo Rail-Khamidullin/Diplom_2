@@ -1,5 +1,6 @@
 package org.api;
 
+// Тело запроса для создания пользователя
 public class UserJSON {
 
     private String email;

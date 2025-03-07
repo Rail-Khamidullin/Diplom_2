@@ -7,7 +7,7 @@ import org.api.UserJSON;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public class CreateUser implements SupportCreateUser {
+public class User implements SupportUser {
 
     // Endpoint создания пользователя
     public static final String CREATE_USER_API = "/api/auth/register";
