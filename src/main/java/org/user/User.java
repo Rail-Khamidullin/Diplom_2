@@ -13,11 +13,8 @@ public class User implements SupportUser {
     public static final String CREATE_USER_API = "/api/auth/register";
     // Endpoint авторизации пользователя
     public static final String LOGIN_USER_API = "/api/auth/login";
-    // Endpoint обновления данных пользователя
-    public static final String UPDATE_DATE_API = "/api/auth/user";
-    // Endpoint удаления пользователя
-    public static final String DELETE_USER_API = "api/auth/user";
-
+    // Endpoint обновления и удаления данных пользователя
+    public static final String DATE_API = "/api/auth/user";
 
     // Создаём экземпляр класса с телом запроса
     private UserJSON userJSON;
@@ -95,7 +92,7 @@ public class User implements SupportUser {
                 .log().all()
                 .body(userJSON)
                 .when()
-                .patch(UPDATE_DATE_API);
+                .patch(DATE_API);
         return response;
         } else {
             Response response = given()
@@ -103,7 +100,7 @@ public class User implements SupportUser {
                     .log().all()
                     .body(userJSON)
                     .when()
-                    .patch(UPDATE_DATE_API);
+                    .patch(DATE_API);
             return response;
         }
     }
@@ -116,7 +113,7 @@ public class User implements SupportUser {
                 .body("user.name", equalTo(userJSON.getName()));
     }
 
-    @Step("Получаем ответ true и статус код 403 на обновление данных")
+    @Step("Получаем ответ false и статус код 403 на обновление данных")
     public void getUpdateWithDoubleEmail(Response response) {
         response.then().assertThat().statusCode(403)
                 .body("success",equalTo(false))
@@ -136,7 +133,7 @@ public class User implements SupportUser {
                     .header("authorization", accessToken)
                     .log().all()
                     .when()
-                    .delete(DELETE_USER_API);
+                    .delete(DATE_API);
             response.then().statusCode(202); // Проверяем статус код
     }
 }

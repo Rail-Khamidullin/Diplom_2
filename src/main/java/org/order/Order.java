@@ -3,14 +3,15 @@ package org.order;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.api.OrderJSON;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class Order implements SupportOrder {
 
+    // Endpoint получения ингридиентов
     public static final String INGREDIENT_API = "/api/ingredients";
+    // Endpoint создания заказа
     public static final String ORDER_API = "/api/orders";
 
     /// Получение данных об ингредиентах____________________
@@ -23,6 +24,7 @@ public class Order implements SupportOrder {
         return response;
     }
 
+    /// Создание заказа____________________
     @Step("Создание заказа с авторизацией и без")
     public Response createOrder(OrderJSON orderJSON, String accessToken) {
         if (accessToken != null) {
@@ -65,6 +67,7 @@ public class Order implements SupportOrder {
         response.then().assertThat().statusCode(500);
     }
 
+    /// Получение заказа____________________
     @Step("Получение заказа, с авторизацией и без, для конкретного пользователя")
     public Response getOrderUser(String accessToken) {
         if (accessToken != null) {
