@@ -1,0 +1,6 @@
+tests/user/UpdateUserTest.class
+tests/order/CreateOrderTest.class
+tests/BaseTest.class
+tests/user/LoginUserTest.class
+tests/user/CreateUserTest.class
+tests/order/GetOrderTest.class
