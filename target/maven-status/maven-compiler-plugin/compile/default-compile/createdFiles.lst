@@ -1,7 +1,0 @@
-org/user/User.class
-org/order/SupportOrder.class
-org/order/Order.class
-org/user/SupportUser.class
-org/generator/GeneratorUser.class
-org/api/OrderJSON.class
-org/api/UserJSON.class
